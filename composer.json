@@ -1,0 +1,22 @@
+{
+    "name": "pinga/pinglet-db-swoole",
+    "type": "library",
+    "description": "Pinglet database pool for Swoole",
+    "keywords": ["swoole", "postgres", "mysql", "pool", "redis"],
+    "require": {
+        "php": ">=8.0",
+        "ext-swoole": ">=5.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Taras Kondratyuk",
+            "email": "tk@gepinga.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Db\\": "src"
+        }
+    }
+}
