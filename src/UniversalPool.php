@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Db;
 
-use Db\ConnectionPool;
+use Swoole\ConnectionPool;
 use Db\UniversalConfig;
 
 class UniversalPool {
@@ -12,12 +12,14 @@ class UniversalPool {
     public const DEFAULT_SIZE = 64;
     protected $pool = false;
 
-    public function __construct(UniversalConfig $config, int $size = self::DEFAULT_SIZE) {
+    public function __construct(array $config, int $size = self::DEFAULT_SIZE) {
         $this->pool = new ConnectionPool(function () use($config) {
-            $driver = $config->getDriver();
-            if (!in_array($driver, $config->getAvailableDrivers())) {
-                return false;
-            }
+            $driver = $config['driver'];
+			$availableDrivers = ['mysql','pgsql','redis'];
+
+			if (!in_array($driver, $availableDrivers)) {
+				return false;
+			}
             switch ($driver) {
                 case 'mysql': return $this->getMySQLConnection($config);
                 case 'pgsql': return $this->getPostgresConnection($config);
@@ -55,36 +57,36 @@ class UniversalPool {
     }
 
     private function getMySQLConnection(&$config) {
-        $conn = new \Swoole\MySQLConnection();
+        $conn = new \Swoole\Coroutine\Mysql();
         $conn->connect($config);
         return $conn;
     }
 
     private function getPostgresConnection(&$config) {
-        $conn = new \Swoole\PostgresConnection();
+        $conn = new \Swoole\Coroutine\PostgreSQL();
         $conn->connect($config);
         return $conn;
     }
 
     private function getRedisConnection(&$config) {
         $redis = new \Redis();
-        $arguments = [$config->getHost(), $config->getPort()];
-        if ($config->getTimeout() !== 0.0) {
-            $arguments[] = $config->getTimeout();
+        $arguments = [$config['host'], $config['port']];
+        if ($config['timeout'] !== 0.0) {
+            $arguments[] = $config['timeout'];
         }
-        if ($config->getRetryInterval() !== 0) {
+        if ($config['retry_interval'] !== 0) {
             $arguments[] = null;
-            $arguments[] = $config->getRetryInterval();
+            $arguments[] = $config['retry_interval'];
         }
-        if ($config->getReadTimeout() !== 0.0) {
-            $arguments[] = $config->getReadTimeout();
+        if ($config['read_timeout'] !== 0.0) {
+            $arguments[] = $config['read_timeout'];
         }
         $redis->connect(...$arguments);
-        if ($config->getAuth()) {
-            $redis->auth($config->getAuth());
+        if ($config['auth']) {
+            $redis->auth($config['auth']);
         }
-        if ($config->getDbIndex() !== 0) {
-            $redis->select($config->getDbIndex());
+        if ($config['dbindex'] !== 0) {
+            $redis->select($config['dbindex']);
         }
         return $redis;
     }
