@@ -2,7 +2,7 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
-$dbConfig = (new Db\UniversalConfig)
+$dbConfig = (new \Pinglet\DB\Config)
         ->withDriver('redis')
         ->withHost('127.0.0.1')
         ->withPort(6379)
@@ -10,7 +10,7 @@ $dbConfig = (new Db\UniversalConfig)
         ->withReadTimeout(-1)
         ->toArray();
 
-$dbPool = new Db\UniversalPool($dbConfig, 2);
+$dbPool = new \Pinglet\DB\Pool($dbConfig, 2);
 
 $conn = $dbPool->get();
 $conn->set('test', 'test_value');
