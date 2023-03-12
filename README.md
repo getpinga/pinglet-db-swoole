@@ -1,6 +1,7 @@
-# pinglet-db-swoole
-Pinglet database pool for Swoole
+# Pinglet DB for Swoole
 
-Based on ipejasinovic/swoole-universal-pool
+Pinglet database pool for Swoole, based on the wonderful [ipejasinovic/swoole-universal-pool](https://github.com/ipejasinovic/swoole-universal-pool).
 
-Do not use in production - more tests needed.
+You can find examples to use in /examples directory.
+
+While it is tuned for Pinglet framework, it can be used in mostly all Swoole apps.
