@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Db;
+namespace Pinglet\DB;
 
-class UniversalConfig {
+class Config {
 
     public const DRIVER_MYSQL = 'mysql';
     public const DRIVER_PGSQL = 'pgsql';
