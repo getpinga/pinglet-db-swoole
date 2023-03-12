@@ -4,7 +4,7 @@
     "description": "Pinglet database pool for Swoole",
     "keywords": ["swoole", "postgres", "mysql", "pool", "redis"],
     "require": {
-        "php": ">=8.0",
+        "php": ">=8.1",
         "ext-swoole": ">=5.0"
     },
     "license": "MIT",
@@ -16,7 +16,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Db\\": "src"
+            "Pinglet\\DB\\": "src"
         }
     }
 }
