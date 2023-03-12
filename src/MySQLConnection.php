@@ -31,19 +31,18 @@ class MySQLConnection implements ConnectionInterface {
             $this->config = $config;
         }
         try {
-            $this->conn = new PDO(
-                    "{$this->config->getDriver()}:" .
-                    (
-                    $this->config->hasUnixSocket() ?
-                    "unix_socket={$this->config->getUnixSocket()};" :
-                    "host={$this->config->getHost()};" . "port={$this->config->getPort()};"
-                    ) .
-                    "dbname={$this->config->getDbname()};" .
-                    "charset={$this->config->getCharset()}",
-                    $this->config->getUsername(),
-                    $this->config->getPassword(),
-                    $this->config->getOptions()
-            );
+			$this->conn = new PDO(
+				"{$this->config['driver']}:" .
+				(
+					isset($this->config['unixSocket']) ?
+					"unix_socket={$this->config['unixSocket']};" :
+					"host={$this->config['host']};" . "port={$this->config['port']};"
+				) .
+				"dbname={$this->config['database']}" .
+				(isset($this->config['charset']) ? ";charset={$this->config['charset']}" : ""),
+				$this->config['user'],
+				$this->config['password']
+			);
             $this->connected = true;
         } catch (PDOException $ex) {
             $this->connect_error = $this->conn->connect_error;
