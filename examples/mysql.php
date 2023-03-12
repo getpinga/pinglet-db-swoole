@@ -2,23 +2,18 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
-Swoole\Runtime::enableCoroutine();
-
-$dbConfig = (new Db\UniversalConfig)
+$dbConfig = (new \Db\UniversalConfig)
         ->withDriver('mysql')
         ->withHost('127.0.0.1')
         ->withPort(3306)
         ->withDbName('test')
         ->withUsername('root')
-        ->withPassword('root');
+        ->withPassword('root')
+        ->toArray();
 
-$dbPool = new Db\UniversalPool($dbConfig, 2);
+$dbPool = new \Db\UniversalPool($dbConfig, 2);
 
-go(function () use (&$dbPool) {
-    $conn = $dbPool->get();
-    $result = $conn->query("select * from test;");
-    if ($result) {
-        var_dump($conn->fetchAll());
-    }
-    $dbPool->put($conn);
-});
+$conn = $dbPool->get();
+$result = $conn->query("select * from test;");
+var_dump ($result);
+$dbPool->put($conn);
