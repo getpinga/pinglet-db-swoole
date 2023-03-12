@@ -37,7 +37,7 @@ class PostgresConnection implements ConnectionInterface {
         if ($config) {
             $this->config = $config;
         }
-        $this->connected = $this->conn->connect("host={$this->config->getHost()} port={$this->config->getPort()} dbname={$this->config->getDbname()} user={$this->config->getUsername()} password={$this->config->getPassword()}");
+        $this->connected = $this->conn->connect("host={$this->config['host']} port={$this->config['port']} dbname={$this->config['database']} user={$this->config['user']} password={$this->config['password']}");
         $this->connect_error = $this->conn->error;
         return $this->connected;
     }
