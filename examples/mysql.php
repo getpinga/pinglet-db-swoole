@@ -2,7 +2,7 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
-$dbConfig = (new \Db\UniversalConfig)
+$dbConfig = (new \Pinglet\DB\Config)
         ->withDriver('mysql')
         ->withHost('127.0.0.1')
         ->withPort(3306)
@@ -11,7 +11,7 @@ $dbConfig = (new \Db\UniversalConfig)
         ->withPassword('root')
         ->toArray();
 
-$dbPool = new \Db\UniversalPool($dbConfig, 2);
+$dbPool = new \Pinglet\DB\Pool($dbConfig, 2);
 
 $conn = $dbPool->get();
 $result = $conn->query("select * from test;");
