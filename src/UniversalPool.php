@@ -6,6 +6,7 @@ namespace Db;
 
 use Swoole\ConnectionPool;
 use Db\UniversalConfig;
+use Db\SwowConnectionPool;
 
 class UniversalPool {
 
@@ -13,19 +14,38 @@ class UniversalPool {
     protected $pool = false;
 
     public function __construct(array $config, int $size = self::DEFAULT_SIZE) {
-        $this->pool = new ConnectionPool(function () use($config) {
-            $driver = $config['driver'];
-			$availableDrivers = ['mysql','pgsql','redis'];
+		if (defined('SWOOLE_VERSION')) {
+			$this->pool = new ConnectionPool(function () use($config) {
+				$driver = $config['driver'];
+				$availableDrivers = ['mysql','pgsql','redis'];
+				if (!in_array($driver, $availableDrivers)) {
+					return false;
+				}
+				switch ($driver) {
+					case 'mysql': return $this->getMySQLConnection($config);
+					case 'pgsql': return $this->getPostgresConnection($config);
+					case 'redis': return $this->getRedisConnection($config);
+				}
+			}, $size);
+		} else {
+			$this->pool = new SwowConnectionPool(function() use ($config) {
+				$driver = $config['driver'];
+				$availableDrivers = ['mysql', 'pgsql', 'redis'];
 
-			if (!in_array($driver, $availableDrivers)) {
-				return false;
-			}
-            switch ($driver) {
-                case 'mysql': return $this->getMySQLConnection($config);
-                case 'pgsql': return $this->getPostgresConnection($config);
-                case 'redis': return $this->getRedisConnection($config);
-            }
-        }, $size);
+				if (!in_array($driver, $availableDrivers)) {
+					return false;
+				}
+
+				switch ($driver) {
+					case 'mysql':
+						return $this->getMySQLConnection($config);
+					case 'pgsql':
+						return $this->getPostgresConnection($config);
+					case 'redis':
+						return $this->getRedisConnection($config);
+				}
+			}, $size);
+		}
     }
 
     public function close() {
@@ -42,11 +62,11 @@ class UniversalPool {
         return $this->pool->fill();
     }
 
-    public function get() {
-        if (!$this->pool) {
-            return false;
-        }
-        return $this->pool->get();
+    public function connect() {
+			if (!$this->pool) {
+				return false;
+			}
+			return $this->pool->get();
     }
 
     public function put($connection) {
@@ -57,15 +77,27 @@ class UniversalPool {
     }
 
     private function getMySQLConnection(&$config) {
-        $conn = new \Swoole\Coroutine\Mysql();
-        $conn->connect($config);
-        return $conn;
+        if (defined('SWOOLE_VERSION')) {
+			$conn = new \Swoole\Coroutine\Mysql();
+			$conn->connect($config);
+			return $conn;
+		} else {
+			$conn = new \Db\MySQLConnection();
+			$conn->connect($config);
+			return $conn;
+		}
     }
 
     private function getPostgresConnection(&$config) {
-        $conn = new \Swoole\Coroutine\PostgreSQL();
-        $conn->connect($config);
-        return $conn;
+        if (defined('SWOOLE_VERSION')) {
+			$conn = new \Swoole\Coroutine\PostgreSQL();
+			$conn->connect($config);
+			return $conn;
+		} else {
+			$conn = new \Db\PostgresConnection();
+			$conn->connect($config);
+			return $conn;
+		}
     }
 
     private function getRedisConnection(&$config) {
