@@ -10,21 +10,21 @@ class UniversalConfig {
     public const DRIVER_PGSQL = 'pgsql';
     public const DRIVER_REDIS = 'redis';
 
-    public $driver = self::DRIVER_MYSQL;
-    public $host = '127.0.0.1';
-    public $port = 3306;
-    public $unixSocket;
-    public $dbname = 'test';
-    public $charset = 'utf8mb4';
-    public $username = 'root';
-    public $password = 'root';
-    public $options = [];
-    public $timeout = 0.0;
-    public $reserved = '';
-    public $retry_interval = 0;
-    public $read_timeout = 0.0;
-    public $auth = '';
-    public $dbIndex = 0;
+    protected $driver = self::DRIVER_MYSQL;
+    protected $host = '127.0.0.1';
+    protected $port = 3306;
+    protected $unixSocket;
+    protected $dbname = 'test';
+    protected $charset = 'utf8mb4';
+    protected $username = 'root';
+    protected $password = 'root';
+    protected $options = [];
+    protected $timeout = 0.0;
+    protected $reserved = '';
+    protected $retry_interval = 0;
+    protected $read_timeout = 0.0;
+    protected $auth = '';
+    protected $dbIndex = 0;
 
     public function getDriver(): string {
         return $this->driver;
