@@ -1,6 +1,6 @@
 <?php
 
-namespace Db;
+namespace Pinglet\Db;
 
 interface ConnectionInterface {
 
