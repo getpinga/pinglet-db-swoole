@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Db;
+namespace Pinglet\DB;
 
 use Swoole\ConnectionPool;
-use Db\UniversalConfig;
+use Pinglet\DB\Config;
 
-class UniversalPool {
+class Pool {
 
     public const DEFAULT_SIZE = 64;
     protected $pool = false;
