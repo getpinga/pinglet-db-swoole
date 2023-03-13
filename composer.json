@@ -16,7 +16,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Pinglet\\DB\\": "src"
+            "Pinglet\\Db\\": "src"
         }
     }
 }
