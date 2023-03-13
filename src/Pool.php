@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Pinglet\DB;
+namespace Pinglet\Db;
 
 use Swoole\ConnectionPool;
-use Pinglet\DB\Config;
+use Pinglet\Db\Config;
 
 class Pool {
 
