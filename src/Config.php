@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Pinglet\DB;
+namespace Pinglet\Db;
 
 class Config {
 
